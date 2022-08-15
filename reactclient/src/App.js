@@ -24,6 +24,23 @@ export default function App() {
       });
   }
 
+  function deletePost(postId) {
+    const url = `${Constants.API_URL_DELETE_POST_BY_ID}/${postId}`;
+
+    fetch(url, {
+      method: 'DELETE'
+    })
+      .then(response => response.json())
+      .then(responseFromServer => {
+        console.log(responseFromServer);
+        onPostDeleted(postId);
+      })
+      .catch((error) => {
+        console.log(error);
+        alert(error);
+      });
+  }
+
   return (
     <div className="container">
       <div className="row min-vh-100">
@@ -67,7 +84,10 @@ export default function App() {
                 <td>{post.content}</td>
                 <td>
                   <button onClick={() => setPostCurrentlyBeingUpdated(post)} className="btn btn-dark btn-lg mx-3 my-3">Update</button>
-                  <button className="btn btn-secondary btn-lg">Delete</button>
+                  <button onClick={() => {
+                    if (window.confirm(`Are you sure you want to delete the post titled "${post.title}"?`))
+                      deletePost(post.postId)
+                  }} className="btn btn-secondary btn-lg">Delete</button>
                 </td>
               </tr>
             ))}
@@ -110,5 +130,23 @@ export default function App() {
     setPosts(postsCopy);
 
     alert(`Post successfully updated. After clicking OK, look for the post with the title "${updatedPost.title}" in the table below to see the updates.`);
+  }
+
+  function onPostDeleted(deletedPostId) {
+    let postsCopy = [...posts];
+
+    const index = postsCopy.findIndex((postsCopyPost, currentIndex) => {
+      if (postsCopyPost.postId === deletedPostId.postId) {
+        return true;
+      }
+    });
+
+    if (index !== -1) {
+      postsCopy.splice(index, 1);
+    }
+
+    setPosts(postsCopy);
+
+    alert('Post successfully deleted. After clicking OK, look at the table below to see your post disappear.');
   }
 }

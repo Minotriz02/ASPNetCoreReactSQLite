@@ -1,5 +1,5 @@
 const API_BASE_URL_DEVELOPMENT = 'https://localhost:7238';
-const API_BASE_URL_PRODUCTION = 'https://appname.azure.websites.net';
+const API_BASE_URL_PRODUCTION = 'https://reactaspnet.azurewebsites.net';
 
 const ENDPOINTS = {
     GET_ALL_POSTS: 'get-all-posts',
